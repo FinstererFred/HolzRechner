@@ -23,43 +23,114 @@
 <body>
 
     <div class="container">
-        <div class="header clearfix">
+        <div class=" clearfix">
             <nav>
-                <ul class="nav nav-pills pull-left">
-                    <li role="presentation" class="active"><a href="#">Neuer Hieb</a></li>
+				<ul class="nav nav-tabs">
+					<li role="presentation" class="active"><a href="#">Neuer Hieb</a></li>
                     <li id="archiv" role="presentation"><a href="#">Archiv <span class="badge">42</span></a></li>
-                </ul>
+				</ul>
             </nav>
-            <h3 class="text-muted pull-right">Project name</h3>
+          
         </div>
 
         <div class="row marketing">
-            <div class="col-lg-12">
-                <form class="form-horizontal">
-                    <div class="form-group">
-                        <label for="inputName" class="col-sm-3 control-label">Name</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control" id="inputName" placeholder="">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="inputBestand" class="col-sm-3 control-label">Bestand</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control" id="inputBestand" placeholder="">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="datum" class="col-sm-3 control-label">Datum</label>
-                        <div class="col-sm-9">
-                           <input type="text" type="text" class="form-control" id="datum">
-                        </div>
-                    </div>
-                    
-                    <button type="button" class="btn btn-default pull-right">Zur Stammeingabe wechseln</button>
-                </form>
+        	<div class="header clearfix">
+	        	<div class="btn-group" role="group" aria-label="..." id="subNav">
+				  <button type="button" class="btn btn-default active" id="navHieb">Daten</button>
+				  <button type="button" class="btn btn-default" id="navStamm">Stamm</button>
+				  <button type="button" class="btn btn-default" id="navListe">Liste <span class="badge">42</span></button>
+				</div>
             </div>
 
+        	<!-- Dateneingabe -->    
+	            <div class="col-lg-12 layer" id="layHieb">
+	                <form class="form-horizontal" >
+	                    <div class="form-group">
+	                        <label for="inputName" class="col-sm-3 control-label">Name</label>
+	                        <div class="col-sm-9">
+	                            <input type="text" class="form-control" id="inputName" placeholder="">
+	                        </div>
+	                    </div>
+	                    <div class="form-group">
+	                        <label for="inputBestand" class="col-sm-3 control-label">Bestand</label>
+	                        <div class="col-sm-9">
+	                            <input type="text" class="form-control" id="inputBestand" placeholder="">
+	                        </div>
+	                    </div>
+	                    <div class="form-group">
+	                        <label for="datum" class="col-sm-3 control-label">Datum</label>
+	                        <div class="col-sm-9">
+	                           <input type="text" type="text" class="form-control" id="datum">
+	                        </div>
+	                    </div>
+	                    
+	                    <button type="button" class="btn btn-default pull-right" id="newHieb">Zur Stammeingabe wechseln</button>
+	                </form>
+	            </div>
+        
+            <!-- Stammeingabe -->
+	            <div class="col-lg-12 layer" style="display:none" id="layStaemme">
+	                <form class="form-horizontal">
+	                    <div class="form-group">
+	                        <label for="stammArt" class="col-sm-3 control-label">Baumart</label>
+	                        <div class="col-sm-9">
+	                            <select class="form-control" id="stammArt">
+		                              <option>Fichte</option>
+		                              <option>2</option>
+		                              <option>3</option>
+		                              <option>4</option>
+		                              <option>5</option>
+		                        </select>
+	                        </div>
+	                    </div>
+	                    
+	                    <div class="form-group">
+	                        <label for="stammRinde" class="col-sm-3 control-label">Rinde</label>
+	                        <div class="col-sm-9">
+	                        	<input type="checkbox" id="stammRinde" value="option1" aria-label="..." class="checkStyle">
+	                       	</div>
+	                    </div>
+
+	                    <div class="form-group">
+	                        <label for="inputLaenge" class="col-sm-3 control-label">Länge</label>
+	                        <div class="col-sm-9 ">
+	                            <div class="col-sm-4 input-group">
+      	                          <input type="text" class="form-control" id="inputLaenge" placeholder="">
+	    	                      <span class="input-group-addon">(m)</span>
+	                            </div>
+	                        </div>
+	                    </div>
+
+	                    <div class="form-group">
+	                        <label for="inputDurchmesser" class="col-sm-3 control-label">Durchmesser</label>
+	                        <div class="col-sm-9 ">
+	                            <div class="col-sm-4 input-group">
+      	                          <input type="text" class="form-control" id="inputDurchmesser" placeholder="">
+	    	                      <span class="input-group-addon">(cm)</span>
+	                            </div>
+	                        </div>
+	                    </div>
+
+	                    <button type="button" class="btn btn-default pull-right" id="endHieb">Eingabe beenden und zur Liste wechseln</button>
+	                </form>
+	            </div>
+
+			<!-- Stammliste -->
+	            <div class="col-lg-12 layer" style="display:none" id="layListe">
+	                <form class="form-horizontal">
+	                    <div class="form-group">
+	                        <label for="inputListe" class="col-sm-3 control-label">Liste</label>
+	                        <div class="col-sm-9">
+	                            <input type="text" class="form-control" id="inputListe" placeholder="">
+	                        </div>
+	                    </div>
+	                    
+	                    <button type="button" class="btn btn-default pull-right" disabled>Hieb speichern und Eingabe beenden</button>
+	                </form>
+	            </div>
+
         </div>
+
 
         <footer class="footer">
             <p>&copy; Company 2014</p>
@@ -79,17 +150,63 @@
 </html>
 
 
-<script>
+<script type="text/JavaScript">
 
 	$(function ()
 	{
-		$('#datum').datepicker({
+		$('#datum').datepicker(
+		{
 		    format: "dd.mm.yyyy",
 		    todayBtn: "linked",
 		    language: "de",
 		    todayHighlight: true,
 		     orientation: "top auto",
 		});
+
+		/* Tabs */
+			$('#navHieb').on('click', function()
+			{
+				$('#subNav button').removeClass('active');
+				$(this).addClass('active');	
+				$('.layer').hide();
+				$('#layHieb').show();
+			});
+
+			$('#navStamm').on('click', function()
+			{
+				$('#subNav button').removeClass('active');
+				$(this).addClass('active');	
+				$('.layer').hide();
+				$('#layStaemme').show();
+			});
+
+			$('#navListe').on('click', function()
+			{
+				$('#subNav button').removeClass('active');
+				$(this).addClass('active');	
+				$('.layer').hide();
+				$('#layListe').show();
+			});
+
+
+
+		/* Buttons */
+			$('#newHieb').on('click', function()
+			{
+				$('#subNav button').removeClass('active');
+				$('#navStamm').addClass('active');
+				$('.layer').hide();
+				$('#layStaemme').show();
+			});
+
+			$('#endHieb').on('click', function()
+			{
+				$('#subNav button').removeClass('active');
+				$('#navListe').addClass('active');
+				$('.layer').hide();
+				$('#layListe').show();
+			});
+
 	})
 
 	function Haufen() 
