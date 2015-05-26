@@ -82,3 +82,16 @@ body {
   position: relative;
   top: 6px;
 }
+
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
+
+.form-horizontal .control-label { text-align: left}
+
+.input-group[class*="col-"] {
+    padding-right: 15px;
+    padding-left: 15px;
+}

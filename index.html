@@ -45,26 +45,25 @@
         	<!-- Dateneingabe -->    
 	            <div class="col-lg-12 layer" id="layHieb">
 	                <form class="form-horizontal" >
-	                    <div class="form-group">
+	                    <div class="form-group" id="grpName">
 	                        <label for="inputName" class="col-sm-3 control-label">Name</label>
-	                        <div class="col-sm-9">
+	                        <div class="col-sm-9 " >
 	                            <input type="text" class="form-control" id="inputName" placeholder="">
 	                        </div>
 	                    </div>
-	                    <div class="form-group">
+	                    <div class="form-group" id="grpBestand">
 	                        <label for="inputBestand" class="col-sm-3 control-label">Bestand</label>
 	                        <div class="col-sm-9">
 	                            <input type="text" class="form-control" id="inputBestand" placeholder="">
 	                        </div>
 	                    </div>
-	                    <div class="form-group">
-	                        <label for="datum" class="col-sm-3 control-label">Datum</label>
+	                    <div class="form-group" id="grpDatum">
+	                        <label for="inputDatum" class="col-sm-3 control-label">Datum</label>
 	                        <div class="col-sm-9">
-	                           <input type="text" type="text" class="form-control" id="datum">
+	                           <input type="text" type="text" class="form-control" id="inputDatum">
 	                        </div>
 	                    </div>
 	                    
-	                    <button type="button" class="btn btn-default pull-right" id="newHieb">Zur Stammeingabe wechseln</button>
 	                </form>
 	            </div>
         
@@ -74,44 +73,68 @@
 	                    <div class="form-group">
 	                        <label for="stammArt" class="col-sm-3 control-label">Baumart</label>
 	                        <div class="col-sm-9">
-	                            <select class="form-control" id="stammArt">
-		                              <option>Fichte</option>
-		                              <option>2</option>
-		                              <option>3</option>
-		                              <option>4</option>
-		                              <option>5</option>
-		                        </select>
+	                        	<div class="col-sm-4">
+		                            <select class="form-control" id="stammArt">
+			                              <option>Fichte</option>
+			                              <option>2</option>
+			                              <option>3</option>
+			                              <option>4</option>
+			                              <option>5</option>
+			                        </select>
+			                    </div>
 	                        </div>
 	                    </div>
 	                    
 	                    <div class="form-group">
 	                        <label for="stammRinde" class="col-sm-3 control-label">Rinde</label>
 	                        <div class="col-sm-9">
-	                        	<input type="checkbox" id="stammRinde" value="option1" aria-label="..." class="checkStyle">
+	                         	<div class="col-sm-6 input-group">
+	                        		<input type="checkbox" id="stammRinde" value="option1" aria-label="..." class="checkStyle">
+	                        	</div>
 	                       	</div>
 	                    </div>
 
 	                    <div class="form-group">
-	                        <label for="inputLaenge" class="col-sm-3 control-label">Länge</label>
+	                        <label for="stammAbschnitt" class="col-sm-3 control-label">Abschnitte</label>
+	                        <div class="col-sm-9">
+	                        	<div class="col-sm-6 input-group">
+	                        		<input type="checkbox" id="stammAbschnitt" value="option2" aria-label="..." class="checkStyle">
+	                        	</div>
+	                       	</div>
+	                    </div>
+
+	                    <div class="form-group">
+	                        <label for="inputLaenge" class="col-sm-3 control-label">Länge (m)</label>
 	                        <div class="col-sm-9 ">
-	                            <div class="col-sm-4 input-group">
+	                            <div class="col-sm-4">
       	                          <input type="text" class="form-control" id="inputLaenge" placeholder="">
-	    	                      <span class="input-group-addon">(m)</span>
-	                            </div>
+	    	                    </div>
 	                        </div>
 	                    </div>
 
 	                    <div class="form-group">
-	                        <label for="inputDurchmesser" class="col-sm-3 control-label">Durchmesser</label>
+	                        <label for="inputDurchmesser" class="col-sm-3 control-label">Durchmesser (cm)</label>
 	                        <div class="col-sm-9 ">
-	                            <div class="col-sm-4 input-group">
+	                            <div class="col-sm-6 input-group">
       	                          <input type="text" class="form-control" id="inputDurchmesser" placeholder="">
-	    	                      <span class="input-group-addon">(cm)</span>
+	    	                       <span class="input-group-btn">
+								        <button class="btn btn-default" type="button">Berechnen</button>
+								   </span>
 	                            </div>
+
+	                            
 	                        </div>
 	                    </div>
 
-	                    <button type="button" class="btn btn-default pull-right" id="endHieb">Eingabe beenden und zur Liste wechseln</button>
+	                    <div class="form-group">
+	                        <label for="stammKuvatur" class="col-sm-3 control-label">Kuvatur</label>
+	                        <div class="col-sm-9">
+	                        	<div class="col-sm-3">
+      	                          <input type="text" class="form-control" id="stammKuvatur" placeholder="0m &sup2;">
+	    	                    </div>
+	                       	</div>
+	                    </div>
+	                    
 	                </form>
 	            </div>
 
@@ -174,6 +197,9 @@
 
 			$('#navStamm').on('click', function()
 			{
+
+				/* todo: hieb init, falls false -> return */
+
 				$('#subNav button').removeClass('active');
 				$(this).addClass('active');	
 				$('.layer').hide();
@@ -207,16 +233,37 @@
 				$('#layListe').show();
 			});
 
-	})
+	});
 
-	function Haufen() 
+	function Hieb() 
 	{
 	    this.matches = '';
 	    this.staemme = [];
+ 		this.test = true;
+ 		this.name = '';
+ 		this.bestand = '';
+ 		this.datum = '';
+ 		
+
+ 		this.init();
+
 	}
 
-		Haufen.prototype = 
+		Hieb.prototype = 
 		{
+		    init: function()
+		    {
+		    	var name = $('#inputName').val();
+		    	var bestand = $('#inputBestand').val();
+		    	var datum = $('#inputDatum').val();
+
+		    	$('#layHieb div').removeClass('has-error');
+
+		    	if(name.length == 0) {$('#grpName').addClass('has-error'); this.test = false; } else { this.name = name; }
+		    	if(bestand.length == 0) {$('#grpBestand').addClass('has-error'); this.test = false; } else { this.bestand = bestand; }
+		    	if(datum.length == 0) {$('#grpDatum').addClass('has-error'); this.test = false; } else { this.datum = datum; }
+		    },
+
 		    addStamm: function(st) 
 		    {
 		        this.staemme.push(st);
