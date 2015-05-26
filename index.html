@@ -38,7 +38,7 @@
 	        	<div class="btn-group" role="group" aria-label="..." id="subNav">
 				  <button type="button" class="btn btn-default active" id="navHieb">Daten</button>
 				  <button type="button" class="btn btn-default" id="navStamm">Stamm</button>
-				  <button type="button" class="btn btn-default" id="navListe">Liste <span class="badge">42</span></button>
+				  <button type="button" class="btn btn-default" id="navListe">Liste <span class="badge">0</span></button>
 				</div>
             </div>
 
@@ -48,19 +48,19 @@
 	                    <div class="form-group" id="grpName">
 	                        <label for="inputName" class="col-sm-3 control-label">Name</label>
 	                        <div class="col-sm-9 " >
-	                            <input type="text" class="form-control" id="inputName" placeholder="">
+	                            <input type="text" class="form-control" id="inputName" placeholder="" value="name">
 	                        </div>
 	                    </div>
 	                    <div class="form-group" id="grpBestand">
 	                        <label for="inputBestand" class="col-sm-3 control-label">Bestand</label>
 	                        <div class="col-sm-9">
-	                            <input type="text" class="form-control" id="inputBestand" placeholder="">
+	                            <input type="text" class="form-control" id="inputBestand" placeholder="" value="bestand">
 	                        </div>
 	                    </div>
 	                    <div class="form-group" id="grpDatum">
 	                        <label for="inputDatum" class="col-sm-3 control-label">Datum</label>
 	                        <div class="col-sm-9">
-	                           <input type="text" type="text" class="form-control" id="inputDatum">
+	                           <input type="text" type="text" class="form-control" id="inputDatum" value="01.01.1970">
 	                        </div>
 	                    </div>
 	                    
@@ -75,11 +75,15 @@
 	                        <div class="col-sm-9">
 	                        	<div class="col-sm-4">
 		                            <select class="form-control" id="stammArt">
-			                              <option>Fichte</option>
-			                              <option>2</option>
-			                              <option>3</option>
-			                              <option>4</option>
-			                              <option>5</option>
+			                              <option value="1">Fichte</option>
+			                              <option value="2">Kiefer</option>
+			                              <option value="3">Tanne</option>
+			                              <option value="4">Douglasie</option>
+			                              <option value="5">Eiche</option>
+			                              <option value="6">Buche</option>
+			                              <option value="7">Birke</option>
+			                              <option value="8">Lärche</option>
+			                              <option value="9">Sonstige</option>
 			                        </select>
 			                    </div>
 	                        </div>
@@ -115,21 +119,21 @@
 	                    <div class="form-group">
 	                        <label for="inputDurchmesser" class="col-sm-3 control-label">Durchmesser (cm)</label>
 	                        <div class="col-sm-9 ">
-	                            <div class="col-sm-6 input-group">
+	                            <div class="col-sm-4 ">
       	                          <input type="text" class="form-control" id="inputDurchmesser" placeholder="">
-	    	                       <span class="input-group-btn">
-								        <button class="btn btn-default" type="button">Berechnen</button>
-								   </span>
-	                            </div>
+	    	                       
 
-	                            
+	                            </div>
+	                            <button class="btn btn-default" type="button">Berechnen</button>
+
 	                        </div>
 	                    </div>
+
 
 	                    <div class="form-group">
 	                        <label for="stammKuvatur" class="col-sm-3 control-label">Kuvatur</label>
 	                        <div class="col-sm-9">
-	                        	<div class="col-sm-3">
+	                        	<div class="col-sm-4">
       	                          <input type="text" class="form-control" id="stammKuvatur" placeholder="0m &sup2;">
 	    	                    </div>
 	                       	</div>
@@ -175,15 +179,17 @@
 
 <script type="text/JavaScript">
 
+	var newHieb;
+
 	$(function ()
 	{
-		$('#datum').datepicker(
+		$('#inputDatum').datepicker(
 		{
 		    format: "dd.mm.yyyy",
 		    todayBtn: "linked",
 		    language: "de",
 		    todayHighlight: true,
-		     orientation: "top auto",
+		    orientation: "top auto",
 		});
 
 		/* Tabs */
@@ -198,12 +204,15 @@
 			$('#navStamm').on('click', function()
 			{
 
-				/* todo: hieb init, falls false -> return */
+				newHieb = new Hieb(true);
 
-				$('#subNav button').removeClass('active');
-				$(this).addClass('active');	
-				$('.layer').hide();
-				$('#layStaemme').show();
+				if( newHieb.isValid() )
+				{
+					$('#subNav button').removeClass('active');
+					$(this).addClass('active');	
+					$('.layer').hide();
+					$('#layStaemme').show();
+				}
 			});
 
 			$('#navListe').on('click', function()
@@ -235,17 +244,20 @@
 
 	});
 
-	function Hieb() 
+	function Hieb(newH) 
 	{
-	    this.matches = '';
-	    this.staemme = [];
- 		this.test = true;
- 		this.name = '';
- 		this.bestand = '';
- 		this.datum = '';
- 		
+	    /* eigenschaften von hieb */
+		    this.staemme = [];
+	 		this.valid = true;
+	 		this.name = '';
+	 		this.bestand = '';
+	 		this.datum = '';
 
- 		this.init();
+		/* constructor, wird von tab staemme aufgerufen */	 		
+	 		if(newH)
+	 		{
+	 			this.init();
+	 		}
 
 	}
 
@@ -259,14 +271,15 @@
 
 		    	$('#layHieb div').removeClass('has-error');
 
-		    	if(name.length == 0) {$('#grpName').addClass('has-error'); this.test = false; } else { this.name = name; }
-		    	if(bestand.length == 0) {$('#grpBestand').addClass('has-error'); this.test = false; } else { this.bestand = bestand; }
-		    	if(datum.length == 0) {$('#grpDatum').addClass('has-error'); this.test = false; } else { this.datum = datum; }
+		    	if(name.length == 0) {$('#grpName').addClass('has-error'); this.valid = false; } else { this.name = name; }
+		    	if(bestand.length == 0) {$('#grpBestand').addClass('has-error'); this.valid = false; } else { this.bestand = bestand; }
+		    	if(datum.length == 0) {$('#grpDatum').addClass('has-error'); this.valid = false; } else { this.datum = datum; }
 		    },
 
 		    addStamm: function(st) 
 		    {
 		        this.staemme.push(st);
+		        this.staemme[this.getStammCount()-1].position = this.getStammCount();
 		    }, 
 
 		    loescheStamm: function(st)
@@ -277,14 +290,25 @@
 		    speichern: function()
 		    {
 		    	;
+		    }, 
+
+		    isValid: function()
+		    {
+		    	return this.valid;
+		    }, 
+
+		    getStammCount: function()
+		    {
+		    	return this.staemme.length;
 		    }
 		}
 
-	function Stamm(durchmesser, laenge) 
+	function Stamm(durchmesser, laenge, baumart, rinde) 
 	{
 	    this.durchmesser = durchmesser;
 	    this.laenge = laenge;
 	    this.baumart = baumart;
+	    this.rinde = rinde;
 	}
 
 		Stamm.prototype = 
@@ -311,4 +335,15 @@
 
 		}
 
+	/* stammdaten */
+	var staerkeKlasse = {'1a' : { 'von' :0, 'bis' : 9 }}/*
+1a	10 bis 14 cm
+1b	15 bis 19 cm
+2a	20 bis 24 cm
+2b	25 bis 29 cm
+3a	30 bis 34 cm
+3b	35 bis 39 cm
+4	40 bis 49 cm
+5	50 bis 59 cm
+*/
 </script>
