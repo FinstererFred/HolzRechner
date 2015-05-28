@@ -2,13 +2,14 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
+	<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>HolzRechner</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/custom.css" rel="stylesheet">
     <link href="css/bootstrap-datepicker3.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
 
     <!-- Bootstrap -->
 
@@ -60,7 +61,7 @@
 	                    <div class="form-group" id="grpDatum">
 	                        <label for="inputDatum" class="col-sm-3 control-label">Datum</label>
 	                        <div class="col-sm-9">
-	                           <input type="text" type="text" class="form-control" id="inputDatum" value="01.01.1970">
+	                           <input type="text" type="text" class="form-control" id="inputDatum" value="01.01.1970" readonly>
 	                        </div>
 	                    </div>
 	                    
@@ -70,74 +71,78 @@
             <!-- Stammeingabe -->
 	            <div class="col-lg-12 layer" style="display:none" id="layStaemme">
 	                <form class="form-horizontal">
-	                    <div class="form-group">
-	                        <label for="stammArt" class="col-sm-3 control-label">Baumart</label>
+	                    <div class="form-group form-group-lg">
+	                        <br class="hidden-sm hidden-md hidden-lg"/>
+	                        <label for="stammArt" class="col-sm-3 control-label hidden-xs">Baumart</label>
 	                        <div class="col-sm-9">
 	                        	<div class="col-sm-4">
 		                            <select class="form-control" id="stammArt">
-			                              <option value="1">Fichte</option>
-			                              <option value="2">Kiefer</option>
-			                              <option value="3">Tanne</option>
-			                              <option value="4">Douglasie</option>
-			                              <option value="5">Eiche</option>
-			                              <option value="6">Buche</option>
-			                              <option value="7">Birke</option>
-			                              <option value="8">Lärche</option>
-			                              <option value="9">Sonstige</option>
+			                              <option value="-1"></option>
+			                              <option value="0">Fichte</option>
+			                              <option value="1">Kiefer</option>
+			                              <option value="2">Tanne</option>
+			                              <option value="3">Douglasie</option>
+			                              <option value="4">Eiche</option>
+			                              <option value="5">Buche</option>
+			                              <option value="6">Birke</option>
+			                              <option value="7">Lärche</option>
+			                              <option value="8">Sonstige</option>
 			                        </select>
 			                    </div>
 	                        </div>
 	                    </div>
 	                    
 	                    <div class="form-group">
-	                        <label for="stammRinde" class="col-sm-3 control-label">Rinde</label>
+	                        <label for="stammRinde" class="col-sm-3 control-label hidden-xs">Rindenabzug</label>
 	                        <div class="col-sm-9">
 	                         	<div class="col-sm-6 input-group">
-	                        		<input type="checkbox" id="stammRinde" value="option1" aria-label="..." class="checkStyle">
+	                        		<div class="checkbox">
+										<label>
+	                        				<input type="checkbox" id="stammRinde" value="option1" aria-label="..." class="checkStyle"> <span class="hidden-sm hidden-md hidden-lg">Rindenabzug</span>
+	                        			</label>
+	                        		</div>
 	                        	</div>
 	                       	</div>
 	                    </div>
 
 	                    <div class="form-group">
-	                        <label for="stammAbschnitt" class="col-sm-3 control-label">Abschnitte</label>
+	                        <label for="stammAbschnitt" class="col-sm-3 control-label hidden-xs">Abschnitte</label>
 	                        <div class="col-sm-9">
 	                        	<div class="col-sm-6 input-group">
-	                        		<input type="checkbox" id="stammAbschnitt" value="option2" aria-label="..." class="checkStyle">
+	                        		<div class="checkbox">
+										<label>
+	          								<input type="checkbox" id="stammAbschnitt" value="option2" aria-label="..." class="checkStyle"> <span class="hidden-sm hidden-md hidden-lg">Abschnitte</span>
+	        							</label>
+        							</div>
 	                        	</div>
 	                       	</div>
 	                    </div>
 
-	                    <div class="form-group">
-	                        <label for="inputLaenge" class="col-sm-3 control-label">Länge (m)</label>
+	                    <div class="form-group form-group-lg">
+	                       <label for="inputLaenge" class="col-sm-3 control-label hidden-xs">Länge (m)</label>
 	                        <div class="col-sm-9 ">
-	                            <div class="col-sm-4">
-      	                          <input type="text" class="form-control" id="inputLaenge" placeholder="">
+	                            <div class="col-sm-5 col-md-6">
+      	                          <input type="tel" class="form-control" id="inputLaenge" placeholder="Länge (m)">
 	    	                    </div>
 	                        </div>
 	                    </div>
 
-	                    <div class="form-group">
-	                        <label for="inputDurchmesser" class="col-sm-3 control-label">Durchmesser (cm)</label>
+	                    <div class="form-group form-group-lg">
+	                        <label for="inputDurchmesser" class="col-sm-3 control-label  hidden-xs">Durchmesser (cm)</label>
 	                        <div class="col-sm-9 ">
-	                            <div class="col-sm-4 ">
-      	                          <input type="text" class="form-control" id="inputDurchmesser" placeholder="">
-	    	                       
-
+	                            <div class="col-sm-5 col-md-6">
+      	                           <div class="input-group">
+      	                          <input type="tel" class="form-control" id="inputDurchmesser" placeholder="&oslash; (cm)">
+	                            	<span class="input-group-btn">
+	                            	<button class="btn btn-default btn-lg" type="button" id="btnBerechnen"><i class="fa fa-calculator"></i> <span id="volumenErgebnis">0.00</span>m&sup3;</button>
+	    	                       </span>
+	    	                       </div>
 	                            </div>
-	                            <button class="btn btn-default" type="button">Berechnen</button>
 
 	                        </div>
 	                    </div>
 
-
-	                    <div class="form-group">
-	                        <label for="stammKuvatur" class="col-sm-3 control-label">Kuvatur</label>
-	                        <div class="col-sm-9">
-	                        	<div class="col-sm-4">
-      	                          <input type="text" class="form-control" id="stammKuvatur" placeholder="0m &sup2;">
-	    	                    </div>
-	                       	</div>
-	                    </div>
+	                   
 	                    
 	                </form>
 	            </div>
@@ -189,7 +194,7 @@
 		    todayBtn: "linked",
 		    language: "de",
 		    todayHighlight: true,
-		    orientation: "top auto",
+		    orientation: "bottom auto",
 		});
 
 		/* Tabs */
@@ -226,21 +231,31 @@
 
 
 		/* Buttons */
-			$('#newHieb').on('click', function()
+			$('#btnBerechnen').on('click', function() 
 			{
-				$('#subNav button').removeClass('active');
-				$('#navStamm').addClass('active');
-				$('.layer').hide();
-				$('#layStaemme').show();
+				var _laenge = $('#inputLaenge').val();
+				var _durchmesser = $('#inputDurchmesser').val();
+				var _stammArt = $('#stammArt').val();
+				var _stammRinde = $('#stammRinde').prop('checked');
+
+				newHieb.addStamm( new Stamm( _durchmesser,_laenge,_stammArt, _stammRinde ) );
+
+				$('#inputLaenge').val('');
+				$('#inputDurchmesser').val('');
+				$('#inputLaenge').focus();
 			});
 
-			$('#endHieb').on('click', function()
+		/* input felder */
+			$('#inputLaenge').on('keyup', function(event)
 			{
-				$('#subNav button').removeClass('active');
-				$('#navListe').addClass('active');
-				$('.layer').hide();
-				$('#layListe').show();
+				//alert(event.keyCode);
+				if(event.keyCode == 13)
+				{
+					$('#inputDurchmesser').focus();	
+				}
 			});
+
+			
 
 	});
 
@@ -303,16 +318,33 @@
 		    }
 		}
 
-	function Stamm(durchmesser, laenge, baumart, rinde) 
+	function Stamm(durchmesser, laenge, baumart, rindenAbzug) 
 	{
 	    this.durchmesser = durchmesser;
 	    this.laenge = laenge;
 	    this.baumart = baumart;
-	    this.rinde = rinde;
+	    this.rindenAbzug = rindenAbzug;
+	    this.rindenAbzugWert = 0;
+	    this.staerkeKlasse = 0;
+	    this.volumen = 0;
+
+	    this.init();
 	}
 
 		Stamm.prototype = 
 		{
+		    init: function ()
+		    {
+		    	this.findStaerkeKlasse(this.durchmesser);
+		    	
+		    	if(this.rindenAbzug)
+		    	{
+		    		this.findRindenAbzug(this.durchmesser);
+		    	}
+
+		    	this.berechnen();
+		    },
+
 		    meldung: function() 
 		    {
 		        alert(this.durchmesser);
@@ -330,20 +362,121 @@
 
 		   	berechnen: function()
 		   	{
-		   		;
-		   	}
+		   		this.volumen = ((Math.PI/4 * Math.pow( (this.durchmesser-this.rindenAbzugWert), 2) ) * this.laenge ) / 10000;
+				$('#volumenErgebnis').html( this.volumen.toFixed(2) );
+		   	},
+
+		   	findStaerkeKlasse: function()
+	   		{
+	   			var durchmesser = this.durchmesser;
+
+	   			for( var i in staerkeKlassen)
+	   			{
+	   				if( durchmesser >= staerkeKlassen[i]['von'] && durchmesser <= staerkeKlassen[i]['bis'] )
+	   				{
+	   					this.staerkeKlasse = i;
+	   					return;
+	   				}
+	   			}
+	   		},
+
+	   		findRindenAbzug: function()
+			{
+				var abzug = baeume[this.baumart]['abzug'];
+				var staerkeKlasse = this.staerkeKlasse;
+
+				for( var i in rindenAbzug[abzug])
+				{
+					if( staerkeKlasse >= rindenAbzug[abzug][i]['von'] && staerkeKlasse <= rindenAbzug[abzug][i]['bis'] )
+					{
+						this.rindenAbzugWert = rindenAbzug[abzug][i]['abzug'];
+						return;
+					}
+				}
+			}
+
 
 		}
-
 	/* stammdaten */
-	var staerkeKlasse = {'1a' : { 'von' :0, 'bis' : 9 }}/*
-1a	10 bis 14 cm
-1b	15 bis 19 cm
-2a	20 bis 24 cm
-2b	25 bis 29 cm
-3a	30 bis 34 cm
-3b	35 bis 39 cm
-4	40 bis 49 cm
-5	50 bis 59 cm
-*/
+	var staerkeKlassen = 
+	{
+		0: {'name': '0',  'von' :0 , 'bis': 9 },
+		1: {'name': '1a', 'von' :10, 'bis': 14},
+		2: {'name': '1b', 'von' :15, 'bis': 19},
+		3: {'name': '2a', 'von' :20, 'bis': 24},
+		4: {'name': '2b', 'von' :25, 'bis': 29},
+		5: {'name': '3a', 'von' :30, 'bis': 34},
+		6: {'name': '3b', 'von' :35, 'bis': 39},
+		7: {'name': '4',  'von' :40, 'bis': 49},
+		8: {'name': '5',  'von' :50, 'bis': 59},
+		9: {'name': '6',  'von' :60, 'bis': 69},
+		10: {'name': '7', 'von' :70, 'bis': 79},
+		11: {'name': '8', 'von' :80, 'bis': 89}
+	}
+
+	var rindenAbzug = 
+	{
+		0 : { 
+			0: { 'von': 0, 'bis': 4, 'abzug': 1},
+			1: { 'von': 5, 'bis': 8, 'abzug': 2},
+			2: { 'von': 9, 'bis': 100, 'abzug': 3}
+		},
+
+		1 : { 
+			0: { 'von': 0, 'bis': 2, 'abzug': 1},
+			1: { 'von': 3, 'bis': 5, 'abzug': 2},
+			2: { 'von': 6, 'bis': 8, 'abzug': 3},
+			3: { 'von': 9, 'bis':100, 'abzug': 4}
+			
+		},
+
+		2 : { 
+			0: { 'von': 0, 'bis': 6, 'abzug': 1},
+			1: { 'von': 7, 'bis': 100, 'abzug': 2}		
+		},
+
+		3 : { 
+			0: { 'von': 0, 'bis': 3, 'abzug': 1},
+			1: { 'von': 4, 'bis': 4, 'abzug': 2},
+			2: { 'von': 5, 'bis': 6, 'abzug': 3},
+			3: { 'von': 7, 'bis': 7, 'abzug': 4},
+			4: { 'von': 8, 'bis': 100, 'abzug': 5}
+		}
+	}
+
+	var baeume = 
+	{
+		0 : {'name': 'Fichte', 		'abzug': 0},
+		1 : {'name': 'Kiefer',		'abzug': 1},
+		2 : {'name': 'Tanne',		'abzug': 0},
+		3 : {'name': 'Douglasie',	'abzug': 1},
+		4 : {'name': 'Eiche',		'abzug': 3},
+		5 : {'name': 'Buche',		'abzug': 2},
+		6 : {'name': 'Birke',		'abzug': 2},
+		7 : {'name': 'Lärche',		'abzug': 1},
+		8 : {'name': 'Sonstiger',	'abzug': 0}
+	}
+
+	function findStaerkeKlasse (durchmesser)
+	{
+		for( var i in staerkeKlassen)
+		{
+			if( durchmesser >= staerkeKlassen[i]['von'] && durchmesser <= staerkeKlassen[i]['bis'] )
+			{
+				return i;
+			}
+		}
+	}
+
+	function findRindenAbzug(abzug, staerkeKlasse)
+	{
+		for( var i in rindenAbzug[abzug])
+		{
+			if( staerkeKlasse >= rindenAbzug[abzug][i]['von'] && staerkeKlasse <= rindenAbzug[abzug][i]['bis'] )
+			{
+				return rindenAbzug[abzug][i]['abzug'];
+			}
+		}
+	}
+
 </script>
