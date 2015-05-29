@@ -121,14 +121,24 @@ $(function ()
 		{
 			var stammNr = $(this).parent().data('stammnr');
 			$('#modalStammNr').html(stammNr);
+			$('#delLog').data('stammnr', stammNr);
 
 		/*	
+			
+		*/
+		});
+
+		$('#delLog').on('click', function() 
+		{
+			$('#myModal').modal('hide');
+
+			var stammNr = $(this).data('stammnr');
+			console.log(stammNr);
 			newHieb.deleteStamm(stammNr);
 			newHieb.writeStammCountToTab();
 			newHieb.writeListSum();
 			newHieb.writeList();
 			newHieb.checkboxSaveButton();
-		*/
 		});
 
 		$('#saveNewHieb').on('click', function()
