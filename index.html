@@ -39,7 +39,7 @@
 	        	<div class="btn-group" role="group" aria-label="..." id="subNav">
 				  <button type="button" class="btn btn-default active" id="navHieb">Daten</button>
 				  <button type="button" class="btn btn-default" id="navStamm">Stamm</button>
-				  <button type="button" class="btn btn-default" id="navListe">Liste <span class="badge">0</span></button>
+				  <button type="button" class="btn btn-default" id="navListe">Liste <span class="badge" id="stammCount">0</span></button>
 				</div>
             </div>
 
@@ -75,9 +75,9 @@
 	                        <br class="hidden-sm hidden-md hidden-lg"/>
 	                        <label for="stammArt" class="col-sm-3 control-label hidden-xs">Baumart</label>
 	                        <div class="col-sm-9">
-	                        	<div class="col-sm-4">
+	                        	<div class="col-sm-4 col-md-6">
 		                            <select class="form-control" id="stammArt">
-			                              <option value="-1"></option>
+			                              <option value="-1">Baumart</option>
 			                              <option value="0">Fichte</option>
 			                              <option value="1">Kiefer</option>
 			                              <option value="2">Tanne</option>
@@ -134,15 +134,12 @@
       	                           <div class="input-group">
       	                          <input type="tel" class="form-control" id="inputDurchmesser" placeholder="&oslash; (cm)">
 	                            	<span class="input-group-btn">
-	                            	<button class="btn btn-default btn-lg" type="button" id="btnBerechnen"><i class="fa fa-calculator"></i> <span id="volumenErgebnis">0.00</span>m&sup3;</button>
+	                            	<button class="btn btn-default btn-lg" type="button" id="btnBerechnen"><i class="fa fa-calculator"></i> <span id="volumenErgebnis">0.00</span> fm</button>
 	    	                       </span>
 	    	                       </div>
 	                            </div>
-
 	                        </div>
 	                    </div>
-
-	                   
 	                    
 	                </form>
 	            </div>
@@ -151,13 +148,27 @@
 	            <div class="col-lg-12 layer" style="display:none" id="layListe">
 	                <form class="form-horizontal">
 	                    <div class="form-group">
-	                        <label for="inputListe" class="col-sm-3 control-label">Liste</label>
+	                        <br/>
 	                        <div class="col-sm-9">
-	                            <input type="text" class="form-control" id="inputListe" placeholder="">
+	                        	<table id="stammListe" width="100%">
+	                        		<tr id="listeHead">
+	                        			<th>Nr</th>
+	                        			<th class="baum">Baumart</th>
+	                        			<th class="kub">Kubatur</th>
+	                        			<th class="del"></th>
+	                        		</tr>
+	                        		<tr>
+	                        			<td></td>
+	                        			<td></td>
+	                        			<td class="kub"><b><span id="kubSumme"></span> fm</b></td>
+	                        			<td class="del"></td>
+	                        		</tr>
+	                        	</table>
+
 	                        </div>
 	                    </div>
 	                    
-	                    <button type="button" class="btn btn-default pull-right" disabled>Hieb speichern und Eingabe beenden</button>
+	                    <button type="button" class="btn btn-default pull-right" disabled id="saveNewHieb" >Hieb speichern</button>
 	                </form>
 	            </div>
 
@@ -165,8 +176,27 @@
 
 
         <footer class="footer">
-            <p>&copy; Company 2014</p>
+            <p>&copy; Faschterer 2015</p>
         </footer>
+
+
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Löschen?</h4>
+              </div>
+              <div class="modal-body">
+                Stamm Nr. <span id="modalStammNr"></span> löschen?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Nein</button>
+                <button type="button" class="btn btn-primary">Ja</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
     </div>
     <!-- /container -->
@@ -176,6 +206,10 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/bootstrap-datepicker.min.js"></script>
     <script src="js/locales/bootstrap-datepicker.de.js"></script>
+    <script src="js/stammdaten.js"></script>
+    <script src="js/classes.js"></script>
+    <script src="js/functions.js"></script>
+    
 
 </body>
 
@@ -184,299 +218,6 @@
 
 <script type="text/JavaScript">
 
-	var newHieb;
-
-	$(function ()
-	{
-		$('#inputDatum').datepicker(
-		{
-		    format: "dd.mm.yyyy",
-		    todayBtn: "linked",
-		    language: "de",
-		    todayHighlight: true,
-		    orientation: "bottom auto",
-		});
-
-		/* Tabs */
-			$('#navHieb').on('click', function()
-			{
-				$('#subNav button').removeClass('active');
-				$(this).addClass('active');	
-				$('.layer').hide();
-				$('#layHieb').show();
-			});
-
-			$('#navStamm').on('click', function()
-			{
-
-				newHieb = new Hieb(true);
-
-				if( newHieb.isValid() )
-				{
-					$('#subNav button').removeClass('active');
-					$(this).addClass('active');	
-					$('.layer').hide();
-					$('#layStaemme').show();
-				}
-			});
-
-			$('#navListe').on('click', function()
-			{
-				$('#subNav button').removeClass('active');
-				$(this).addClass('active');	
-				$('.layer').hide();
-				$('#layListe').show();
-			});
-
-
-
-		/* Buttons */
-			$('#btnBerechnen').on('click', function() 
-			{
-				var _laenge = $('#inputLaenge').val();
-				var _durchmesser = $('#inputDurchmesser').val();
-				var _stammArt = $('#stammArt').val();
-				var _stammRinde = $('#stammRinde').prop('checked');
-
-				newHieb.addStamm( new Stamm( _durchmesser,_laenge,_stammArt, _stammRinde ) );
-
-				$('#inputLaenge').val('');
-				$('#inputDurchmesser').val('');
-				$('#inputLaenge').focus();
-			});
-
-		/* input felder */
-			$('#inputLaenge').on('keyup', function(event)
-			{
-				//alert(event.keyCode);
-				if(event.keyCode == 13)
-				{
-					$('#inputDurchmesser').focus();	
-				}
-			});
-
-			
-
-	});
-
-	function Hieb(newH) 
-	{
-	    /* eigenschaften von hieb */
-		    this.staemme = [];
-	 		this.valid = true;
-	 		this.name = '';
-	 		this.bestand = '';
-	 		this.datum = '';
-
-		/* constructor, wird von tab staemme aufgerufen */	 		
-	 		if(newH)
-	 		{
-	 			this.init();
-	 		}
-
-	}
-
-		Hieb.prototype = 
-		{
-		    init: function()
-		    {
-		    	var name = $('#inputName').val();
-		    	var bestand = $('#inputBestand').val();
-		    	var datum = $('#inputDatum').val();
-
-		    	$('#layHieb div').removeClass('has-error');
-
-		    	if(name.length == 0) {$('#grpName').addClass('has-error'); this.valid = false; } else { this.name = name; }
-		    	if(bestand.length == 0) {$('#grpBestand').addClass('has-error'); this.valid = false; } else { this.bestand = bestand; }
-		    	if(datum.length == 0) {$('#grpDatum').addClass('has-error'); this.valid = false; } else { this.datum = datum; }
-		    },
-
-		    addStamm: function(st) 
-		    {
-		        this.staemme.push(st);
-		        this.staemme[this.getStammCount()-1].position = this.getStammCount();
-		    }, 
-
-		    loescheStamm: function(st)
-		    {
-		    	;
-		    },
-
-		    speichern: function()
-		    {
-		    	;
-		    }, 
-
-		    isValid: function()
-		    {
-		    	return this.valid;
-		    }, 
-
-		    getStammCount: function()
-		    {
-		    	return this.staemme.length;
-		    }
-		}
-
-	function Stamm(durchmesser, laenge, baumart, rindenAbzug) 
-	{
-	    this.durchmesser = durchmesser;
-	    this.laenge = laenge;
-	    this.baumart = baumart;
-	    this.rindenAbzug = rindenAbzug;
-	    this.rindenAbzugWert = 0;
-	    this.staerkeKlasse = 0;
-	    this.volumen = 0;
-
-	    this.init();
-	}
-
-		Stamm.prototype = 
-		{
-		    init: function ()
-		    {
-		    	this.findStaerkeKlasse(this.durchmesser);
-		    	
-		    	if(this.rindenAbzug)
-		    	{
-		    		this.findRindenAbzug(this.durchmesser);
-		    	}
-
-		    	this.berechnen();
-		    },
-
-		    meldung: function() 
-		    {
-		        alert(this.durchmesser);
-		    }, 
-
-		    speichern: function()
-		    {
-		    	;
-		    },
-
-		    loeschen: function()
-		   	{
-		   		;
-		   	},
-
-		   	berechnen: function()
-		   	{
-		   		this.volumen = ((Math.PI/4 * Math.pow( (this.durchmesser-this.rindenAbzugWert), 2) ) * this.laenge ) / 10000;
-				$('#volumenErgebnis').html( this.volumen.toFixed(2) );
-		   	},
-
-		   	findStaerkeKlasse: function()
-	   		{
-	   			var durchmesser = this.durchmesser;
-
-	   			for( var i in staerkeKlassen)
-	   			{
-	   				if( durchmesser >= staerkeKlassen[i]['von'] && durchmesser <= staerkeKlassen[i]['bis'] )
-	   				{
-	   					this.staerkeKlasse = i;
-	   					return;
-	   				}
-	   			}
-	   		},
-
-	   		findRindenAbzug: function()
-			{
-				var abzug = baeume[this.baumart]['abzug'];
-				var staerkeKlasse = this.staerkeKlasse;
-
-				for( var i in rindenAbzug[abzug])
-				{
-					if( staerkeKlasse >= rindenAbzug[abzug][i]['von'] && staerkeKlasse <= rindenAbzug[abzug][i]['bis'] )
-					{
-						this.rindenAbzugWert = rindenAbzug[abzug][i]['abzug'];
-						return;
-					}
-				}
-			}
-
-
-		}
-	/* stammdaten */
-	var staerkeKlassen = 
-	{
-		0: {'name': '0',  'von' :0 , 'bis': 9 },
-		1: {'name': '1a', 'von' :10, 'bis': 14},
-		2: {'name': '1b', 'von' :15, 'bis': 19},
-		3: {'name': '2a', 'von' :20, 'bis': 24},
-		4: {'name': '2b', 'von' :25, 'bis': 29},
-		5: {'name': '3a', 'von' :30, 'bis': 34},
-		6: {'name': '3b', 'von' :35, 'bis': 39},
-		7: {'name': '4',  'von' :40, 'bis': 49},
-		8: {'name': '5',  'von' :50, 'bis': 59},
-		9: {'name': '6',  'von' :60, 'bis': 69},
-		10: {'name': '7', 'von' :70, 'bis': 79},
-		11: {'name': '8', 'von' :80, 'bis': 89}
-	}
-
-	var rindenAbzug = 
-	{
-		0 : { 
-			0: { 'von': 0, 'bis': 4, 'abzug': 1},
-			1: { 'von': 5, 'bis': 8, 'abzug': 2},
-			2: { 'von': 9, 'bis': 100, 'abzug': 3}
-		},
-
-		1 : { 
-			0: { 'von': 0, 'bis': 2, 'abzug': 1},
-			1: { 'von': 3, 'bis': 5, 'abzug': 2},
-			2: { 'von': 6, 'bis': 8, 'abzug': 3},
-			3: { 'von': 9, 'bis':100, 'abzug': 4}
-			
-		},
-
-		2 : { 
-			0: { 'von': 0, 'bis': 6, 'abzug': 1},
-			1: { 'von': 7, 'bis': 100, 'abzug': 2}		
-		},
-
-		3 : { 
-			0: { 'von': 0, 'bis': 3, 'abzug': 1},
-			1: { 'von': 4, 'bis': 4, 'abzug': 2},
-			2: { 'von': 5, 'bis': 6, 'abzug': 3},
-			3: { 'von': 7, 'bis': 7, 'abzug': 4},
-			4: { 'von': 8, 'bis': 100, 'abzug': 5}
-		}
-	}
-
-	var baeume = 
-	{
-		0 : {'name': 'Fichte', 		'abzug': 0},
-		1 : {'name': 'Kiefer',		'abzug': 1},
-		2 : {'name': 'Tanne',		'abzug': 0},
-		3 : {'name': 'Douglasie',	'abzug': 1},
-		4 : {'name': 'Eiche',		'abzug': 3},
-		5 : {'name': 'Buche',		'abzug': 2},
-		6 : {'name': 'Birke',		'abzug': 2},
-		7 : {'name': 'Lärche',		'abzug': 1},
-		8 : {'name': 'Sonstiger',	'abzug': 0}
-	}
-
-	function findStaerkeKlasse (durchmesser)
-	{
-		for( var i in staerkeKlassen)
-		{
-			if( durchmesser >= staerkeKlassen[i]['von'] && durchmesser <= staerkeKlassen[i]['bis'] )
-			{
-				return i;
-			}
-		}
-	}
-
-	function findRindenAbzug(abzug, staerkeKlasse)
-	{
-		for( var i in rindenAbzug[abzug])
-		{
-			if( staerkeKlasse >= rindenAbzug[abzug][i]['von'] && staerkeKlasse <= rindenAbzug[abzug][i]['bis'] )
-			{
-				return rindenAbzug[abzug][i]['abzug'];
-			}
-		}
-	}
+	$('#inputDatum').val( datum() );
 
 </script>
