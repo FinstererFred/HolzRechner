@@ -40,7 +40,19 @@ function Hieb(newH)
 
 	    speichern: function()
 	    {
-	    	;
+	    	var kopfdaten = {
+	    						'name' :this.name,
+ 								'bestand' :this.bestand,
+ 								'datum' :this.datum
+	    					}
+
+	    	$.ajax(
+	    		{
+	    			method: "POST",
+	    			url: 'php/ajax.php',
+	    			data: { test : kopfdaten}
+	    		});
+
 	    }, 
 
 	    isValid: function()
@@ -183,7 +195,7 @@ Stamm.prototype =
 
    	berechnen: function()
    	{
-   		this.volumen = ((Math.PI/4 * Math.pow( (this.durchmesser-this.rindenAbzugWert), 2) ) * this.laenge ) / 10000;
+   		this.volumen = formatKub(((Math.PI/4 * Math.pow( (this.durchmesser-this.rindenAbzugWert), 2) ) * this.laenge ) / 10000);
 	},
 
 	writeToButton: function()
