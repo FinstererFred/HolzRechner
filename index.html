@@ -10,7 +10,8 @@
     <link href="css/custom.css" rel="stylesheet">
     <link href="css/bootstrap-datepicker3.css" rel="stylesheet">
     <link href="css/font-awesome.min.css" rel="stylesheet">
-
+	
+	<link href="css/dataTables.bootstrap.css" rel="stylesheet" type="text/css" >
     <!-- Bootstrap -->
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -27,14 +28,31 @@
         <div class=" clearfix">
             <nav>
 				<ul class="nav nav-tabs">
-					<li role="presentation" class="active"><a href="#">Neuer Hieb</a></li>
-                    <li id="archiv" role="presentation"><a href="#">Archiv <span class="badge">42</span></a></li>
+					<li id="newHiebTab" role="presentation" class="active"><a href="#">Neuer Hieb</a></li>
+                    <li id="archivTab" role="presentation"><a href="#">Archiv <span class="badge" id="hiebCount">0</span></a></li>
 				</ul>
             </nav>
           
         </div>
 
-        <div class="row marketing">
+		<div class="row marketing" id="archivBody" style="display:none">
+			<div class="col-lg-12" >
+				<table class="table table-condensed" id="hiebList">
+				    <thead>
+				      <tr>
+				        <th class="col-md-2">Datum</th>
+				        <th>Name</th>
+				        <th>Bestand</th>
+				        <th class="col-md-2 hidden-xs">Stämme</th>
+				        <th class="col-md-2 hidden-xs">Kubatur</th>
+				      </tr>
+				    </thead>
+				    <tbody></tbody>
+				</table>
+			</div>
+		</div>
+
+        <div class="row marketing" id="hiebBody">
         	<div class="header clearfix">
 	        	<div class="btn-group" role="group" aria-label="..." id="subNav">
 				  <button type="button" class="btn btn-default active" id="navHieb">Daten</button>
@@ -209,6 +227,8 @@
     <script src="js/stammdaten.js"></script>
     <script src="js/classes.js"></script>
     <script src="js/functions.js"></script>
+    <script src="js/jquery.dataTables.min.js"></script>
+    <script src="js/dataTables.bootstrap.js"></script>
     
 
 </body>
@@ -219,5 +239,6 @@
 <script type="text/JavaScript">
 
 	$('#inputDatum').val( datum() );
-
+	getHiebCount();
+	d1 = $.Deferred();
 </script>

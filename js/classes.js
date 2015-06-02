@@ -40,18 +40,41 @@ function Hieb(newH)
 
 	    speichern: function()
 	    {
-	    	var kopfdaten = {
-	    						'name' :this.name,
- 								'bestand' :this.bestand,
- 								'datum' :this.datum
-	    					}
+	    	var _kopfdaten = 
+	    	{
+				'name' :this.name,
+				'bestand' :this.bestand,
+				'datum' :this.datum
+	    	}
+
+	    	var _staemme = [];
+
+	    	for(var i in this.staemme)
+	    	{
+	    		_staemme.push( 
+				{
+					'durchmesser' : this.staemme[i].durchmesser,
+					'laenge' : this.staemme[i].laenge,
+					'baumart' : this.staemme[i].baumart,
+					'rindenAbzug' : this.staemme[i].rindenAbzug,
+					'rindenAbzugWert' : this.staemme[i].rindenAbzugWert,
+					'staerkeKlasse' : this.staemme[i].staerkeKlasse,
+					'volumen' : this.staemme[i].volumen,
+					'position' : this.staemme[i].position
+				});
+	    	}
 
 	    	$.ajax(
-	    		{
-	    			method: "POST",
-	    			url: 'php/ajax.php',
-	    			data: { test : kopfdaten}
-	    		});
+    		{
+    			method: "POST",
+    			url: 'php/ajax.php',
+    			data: { kopfdaten : _kopfdaten, staemme: _staemme, action : 'saveHieb'},
+    			dataType : 'json'	
+    		})
+    		.done( function(resp)
+			{
+				d1.resolve( resp );
+			});
 
 	    }, 
 
@@ -183,16 +206,6 @@ Stamm.prototype =
     	}
     },
 
-    speichern: function()
-    {
-    	;
-    },
-
-    loeschen: function()
-   	{
-   		;
-   	},
-
    	berechnen: function()
    	{
    		this.volumen = formatKub(((Math.PI/4 * Math.pow( (this.durchmesser-this.rindenAbzugWert), 2) ) * this.laenge ) / 10000);
@@ -233,3 +246,35 @@ Stamm.prototype =
 	}
 
 }
+
+function Archiv()
+{
+	this.init();
+}
+	
+	Archiv.prototype = 
+	{
+    	init: function ()
+    	{
+    		$.ajax({
+				method: "POST",
+				url: 'php/ajax.php',
+				data: { action : 'showHiebList'},
+				dataType : 'json'	
+			})
+			.done( function(resp)
+			{
+				var out = '';
+
+				for(var i in resp)
+				{
+					var date = formatDate(resp[i].datum);
+
+					out += '<tr><td>'+date+'</td><td>'+resp[i].name+'<td>'+resp[i].bestand+'</td><td class="hidden-xs">'+resp[i].stammAnz+'</td><td class="hidden-xs">'+formatKub(resp[i].kubSum)+' fm</td></tr>';
+				}
+
+				$('#hiebList tbody').html('').html(out);
+				$('#hiebList').DataTable({'paging':false,'language': {'url':'js/dataTables.german.lang'}});
+			});
+    	}
+    }
