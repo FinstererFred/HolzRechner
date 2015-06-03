@@ -56,7 +56,7 @@ function Hieb(newH)
 					'durchmesser' : this.staemme[i].durchmesser,
 					'laenge' : this.staemme[i].laenge,
 					'baumart' : this.staemme[i].baumart,
-					'rindenAbzug' : this.staemme[i].rindenAbzug,
+					'rindenAbzug' : (this.staemme[i].rindenAbzug) ? 1 : 0,
 					'rindenAbzugWert' : this.staemme[i].rindenAbzugWert,
 					'staerkeKlasse' : this.staemme[i].staerkeKlasse,
 					'volumen' : this.staemme[i].volumen,
@@ -166,6 +166,7 @@ function Hieb(newH)
 
 		changeValues: function(name, bestand, datum)
 		{
+			/* todo: auch von liste aus aktualisieren */
 			this.name = name;
 			this.bestand = bestand;
 			this.datum = datum;
@@ -249,6 +250,7 @@ Stamm.prototype =
 
 function Archiv()
 {
+	
 	this.init();
 }
 	
@@ -256,6 +258,8 @@ function Archiv()
 	{
     	init: function ()
     	{
+    		var that = this;
+
     		$.ajax({
 				method: "POST",
 				url: 'php/ajax.php',
@@ -270,11 +274,45 @@ function Archiv()
 				{
 					var date = formatDate(resp[i].datum);
 
-					out += '<tr><td>'+date+'</td><td>'+resp[i].name+'<td>'+resp[i].bestand+'</td><td class="hidden-xs">'+resp[i].stammAnz+'</td><td class="hidden-xs">'+formatKub(resp[i].kubSum)+' fm</td></tr>';
+					out += '<tr class="archivEntry" data-hiebid="'+resp[i].id+'"><td>'+date+'</td><td>'+resp[i].name+'</td><td>'+resp[i].bestand+'</td><td class="hidden-xs">'+resp[i].stammAnz+'</td><td class="hidden-xs">'+formatKub(resp[i].kubSum)+' fm</td></tr>';
 				}
 
-				$('#hiebList tbody').html('').html(out);
-				$('#hiebList').DataTable({'paging':false,'language': {'url':'js/dataTables.german.lang'}});
+
+				if ( !$.fn.dataTable.isDataTable('#hiebList') )
+				{
+					$('#hiebList tbody').html('').html(out);
+					$('#hiebList').DataTable({'paging':false,'language': {'url':'js/dataTables.german.lang'}});
+				}
+				else
+				{
+					
+					$('#hiebList tbody').html('').html(out);
+					$('#hiebList').DataTable().fnDestroy();
+					$('#hiebList').DataTable({'paging':false,'language': {'url':'js/dataTables.german.lang'}});
+				}
+			});
+    	},
+
+    	writeList: function(hiebId)
+    	{
+    		$.ajax({
+				method: "POST",
+				url: 'php/ajax.php',
+				data: { action : 'showHiebDetails', hiebid: hiebId},
+				dataType : 'json'	
+			})
+			.done( function(resp)
+			{
+				var out = '';
+				for(var i in resp)
+				{
+					var rinde = (resp[i].rindenabzug == '1') ? 'ja' : 'nein';
+
+					out += '<tr class="archivListEntry"><td>'+resp[i].position+'</td><td>'+baeume[resp[i].baumart].name+'</td><td>'+resp[i].laenge+'</td><td>'+resp[i].durchmesser+'</td><td>'+staerkeKlassen[resp[i].staerkeklasse].name+'</td><td>'+rinde+'</td><td class="kub">'+resp[i].kubatur+' fm</td></tr>';
+				}
+
+
+				$('#hiebDetails tbody').html('').html(out);
 			});
     	}
     }

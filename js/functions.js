@@ -21,12 +21,16 @@ $(function ()
 
 		$('#archivTab').on('click', function()
 		{
-			test = new Archiv();
+			archiv = new Archiv();
 			
 			$('.nav.nav-tabs li').removeClass('active');
 			$(this).addClass('active');
 			$('.row.marketing').hide();
 			$('#archivBody').show();
+			
+			$('#archivList').show();
+			$('#archivDetail').hide();
+			
 		});
 
 
@@ -164,8 +168,9 @@ $(function ()
 			{
 				if(ret.status == 'ok')
 				{
+					getHiebCount();
+
 					delete( newHieb );
-					/* todo: testen */
 					d1 = $.Deferred();
 
 					$('#stammCount').html('0');
@@ -173,11 +178,34 @@ $(function ()
 					$('#navHieb').addClass('active');	
 					$('.layer').hide();
 					$('#layHieb').show();
+					$('#inputName').val('');
+					$('#inputBestand').val('');
+
 				}
 			});
-						
 		});
 
+		$('#hiebList').on('click', 'tr.archivEntry', function ()
+		{
+			var kopfdaten = getHiebKopfdaten(this);
+
+			$('#archivList').hide();
+			archiv.writeList( $(this).data('hiebid') );
+			
+			$('#detailName').html(kopfdaten.name);
+			$('#detailBestand').html(kopfdaten.bestand);
+			$('#detailDatum').html(kopfdaten.datum);
+			$('#detailKubatur').html(kopfdaten.kubatur);
+			
+			
+			$('#archivDetail').show();
+		});
+
+		$('#showHiebList').on('click', function()
+		{
+			$('#archivList').show();
+			$('#archivDetail').hide();
+		});
 
 	/* input felder */
 		$('#inputDurchmesser').on('keyup', function(event)
@@ -256,6 +284,17 @@ function getHiebCount()
 		}
 		
 	});
+}
+
+function getHiebKopfdaten(hieb)
+{
+	var out = {};
+	out.name =    $(hieb).find('td:nth-child(2)').html();
+	out.bestand = $(hieb).find('td:nth-child(3)').html();
+	out.datum =   $(hieb).find('td:nth-child(1)').html();
+	out.kubatur = $(hieb).find('td:last').html();
+
+	return out;
 }
 
 function formatDate(date)

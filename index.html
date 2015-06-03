@@ -25,7 +25,7 @@
 <body>
 
     <div class="container">
-        <div class=" clearfix">
+        <div class=" clearfix hidden-print">
             <nav>
 				<ul class="nav nav-tabs">
 					<li id="newHiebTab" role="presentation" class="active"><a href="#">Neuer Hieb</a></li>
@@ -36,7 +36,7 @@
         </div>
 
 		<div class="row marketing" id="archivBody" style="display:none">
-			<div class="col-lg-12" >
+			<div class="col-lg-12" id="archivList">
 				<table class="table table-condensed" id="hiebList">
 				    <thead>
 				      <tr>
@@ -49,6 +49,34 @@
 				    </thead>
 				    <tbody></tbody>
 				</table>
+			</div>
+
+			<div class="col-lg-12" id="archivDetail" style="display:none">
+				<div class="col-lg-12">
+					<div id="detailName"></div>
+					<div id="detailBestand"></div>
+					<div id="detailDatum"></div>
+					<br/>
+				</div>
+				<div class="col-lg-12">
+					<table class="table table-condensed" id="hiebDetails">
+					    <thead>
+					      <tr>
+					        <th class="col-md-1">Nr.</th>
+					        <th>Baumart</th>
+					        <th><span class="hidden-xs">Länge</span><span class="hidden-sm hidden-md hidden-lg">L</span></th>
+					        <th><span class="hidden-xs">Durchmesser</span><span class="hidden-sm hidden-md hidden-lg">D</span></th>
+					        <th><span class="hidden-xs">Stärkeklasse</span><span class="hidden-sm hidden-md hidden-lg">SK</span></th>
+					        <th class="col-md-2"><span class="hidden-xs">Rindenabzug</span><span class="hidden-sm hidden-md hidden-lg">RAZ</span></th>
+					        <th class="kub">Kubatur</th>
+					      </tr>
+					    </thead>
+					    <tbody></tbody>
+					    <tfoot><tr><td colspan="7" align="right"><span id="detailKubatur"></span></td></tr></tfoot>
+					</table>
+					
+					<button type="button" class="btn btn-default pull-right hidden-print" id="showHiebList" >Zurück</button>
+				</div>
 			</div>
 		</div>
 
@@ -67,13 +95,13 @@
 	                    <div class="form-group" id="grpName">
 	                        <label for="inputName" class="col-sm-3 control-label">Name</label>
 	                        <div class="col-sm-9 " >
-	                            <input type="text" class="form-control" id="inputName" placeholder="" value="name">
+	                            <input type="text" class="form-control" id="inputName" placeholder="" value="">
 	                        </div>
 	                    </div>
 	                    <div class="form-group" id="grpBestand">
 	                        <label for="inputBestand" class="col-sm-3 control-label">Bestand</label>
 	                        <div class="col-sm-9">
-	                            <input type="text" class="form-control" id="inputBestand" placeholder="" value="bestand">
+	                            <input type="text" class="form-control" id="inputBestand" placeholder="" value="">
 	                        </div>
 	                    </div>
 	                    <div class="form-group" id="grpDatum">
@@ -193,7 +221,7 @@
         </div>
 
 
-        <footer class="footer">
+        <footer class="footer hidden-print">
             <p>&copy; Faschterer 2015</p>
         </footer>
 
