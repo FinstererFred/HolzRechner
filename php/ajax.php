@@ -2,17 +2,16 @@
 
 include('db.class.php');
 
-/*
+/**/
 $benutzer = "%".$_SERVER['REMOTE_USER']."%";
-$sql = 'SELECT * from benutzer n where b.kurz like :usernr';
+$sql = 'SELECT * from benutzer b where b.kurz like :usernr';
 $stmt = $db->prepare($sql);
 $stmt->bindParam('usernr',$benutzer,PDO::PARAM_STR);
 $stmt->execute();
 $result = $stmt->fetch(PDO::FETCH_ASSOC);
 $benutzer = $result['id'];
-*/
 
-$erfasser = 1;
+$erfasser = $benutzer;
 
 if($_POST['action'] == 'saveHieb')
 {

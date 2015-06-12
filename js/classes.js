@@ -277,19 +277,14 @@ function Archiv()
 					out += '<tr class="archivEntry" data-hiebid="'+resp[i].id+'"><td>'+date+'</td><td>'+resp[i].name+'</td><td>'+resp[i].bestand+'</td><td class="hidden-xs">'+resp[i].stammAnz+'</td><td class="hidden-xs">'+formatKub(resp[i].kubSum)+' fm</td></tr>';
 				}
 
+				if ( $.fn.dataTable.isDataTable('#hiebList') )
+				{
+					$('#hiebList').DataTable().destroy();
+				}
 
-				if ( !$.fn.dataTable.isDataTable('#hiebList') )
-				{
-					$('#hiebList tbody').html('').html(out);
-					$('#hiebList').DataTable({'paging':false,'language': {'url':'js/dataTables.german.lang'}});
-				}
-				else
-				{
-					
-					$('#hiebList tbody').html('').html(out);
-					$('#hiebList').DataTable().fnDestroy();
-					$('#hiebList').DataTable({'paging':false,'language': {'url':'js/dataTables.german.lang'}});
-				}
+				$('#hiebList tbody').html('').html(out);
+				$('#hiebList').DataTable({'paging':false,'language': {'url':'js/dataTables.german.lang'}, "order": [[ 0, "desc" ]]});
+
 			});
     	},
 
@@ -308,9 +303,8 @@ function Archiv()
 				{
 					var rinde = (resp[i].rindenabzug == '1') ? 'ja' : 'nein';
 
-					out += '<tr class="archivListEntry"><td>'+resp[i].position+'</td><td>'+baeume[resp[i].baumart].name+'</td><td>'+resp[i].laenge+'</td><td>'+resp[i].durchmesser+'</td><td>'+staerkeKlassen[resp[i].staerkeklasse].name+'</td><td>'+rinde+'</td><td class="kub">'+resp[i].kubatur+' fm</td></tr>';
+					out += '<tr class="archivListEntry"><td>'+resp[i].position+'</td><td>'+baeume[resp[i].baumart].name+'</td><td>'+resp[i].laenge+' <span class="hidden-xs"> m</span><span class="visible-print"> m</span></td><td>'+resp[i].durchmesser+'<span class="hidden-xs"> cm</span><span class="visible-print"> cm</span></td><td>'+staerkeKlassen[resp[i].staerkeklasse].name+'</td><td>'+rinde+'</td><td class="kub">'+resp[i].kubatur+' fm</td></tr>';
 				}
-
 
 				$('#hiebDetails tbody').html('').html(out);
 			});

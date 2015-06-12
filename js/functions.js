@@ -74,6 +74,12 @@ $(function ()
 			}
 			else
 			{
+				var name = $('#inputName').val();
+	    		var bestand = $('#inputBestand').val();
+	    		var datum = $('#inputDatum').val();
+
+				newHieb.changeValues(name, bestand, datum);
+
 				newHieb.writeList();
 				newHieb.writeListSum();
 
@@ -210,17 +216,41 @@ $(function ()
 	/* input felder */
 		$('#inputDurchmesser').on('keyup', function(event)
 		{
-			$('#volumenErgebnis').html('0.00')
+			var input = $(this).val();
+						
+			if($.isNumeric(input))
+			{
+				$('#volumenErgebnis').html('0.00');
+
+				if(event.keyCode == 13)
+				{
+					$('#btnBerechnen').click();
+				}
+			}
+			else
+			{
+				$(this).val('');
+			}
+
 		});
 
 		$('#inputLaenge').on('keyup', function(event)
 		{
-			$('#volumenErgebnis').html('0.00')
-
-			//alert(event.keyCode);
-			if(event.keyCode == 13)
+			var input = $(this).val();
+			
+			if($.isNumeric(input))
 			{
-				$('#inputDurchmesser').focus();	
+			
+				$('#volumenErgebnis').html('0.00')
+
+				if(event.keyCode == 13)
+				{
+					$('#inputDurchmesser').focus();	
+				}
+			}
+			else
+			{
+				$(this).val('');
 			}
 		});
 

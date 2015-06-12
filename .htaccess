@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName "HolzRechner"
+AuthUserFile /www/htdocs/v083178/holzlisten/.htpasswd
+require valid-user
