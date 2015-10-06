@@ -11,7 +11,9 @@ $stmt->execute();
 $result = $stmt->fetch(PDO::FETCH_ASSOC);
 $benutzer = $result['id'];
 
+
 $erfasser = $benutzer;
+
 
 if($_POST['action'] == 'saveHieb')
 {
@@ -48,11 +50,11 @@ if($_POST['action'] == 'saveHieb')
 
     /* staemme speichern */ 
 
-   	$sql = 'INSERT INTO staemme (hiebid, position, baumart, laenge, durchmesser,staerkeklasse, kubatur, rindenabzug) VALUES ';
+   	$sql = 'INSERT INTO staemme (hiebid, position, baumart, laenge, durchmesser,staerkeklasse, kubatur_mit, kubatur_ohne) VALUES ';
 
    	foreach ($_POST['staemme'] as $stamm => $details) 
    	{
-   		$sql .= ' (:hiebid'.$stamm.', :position'.$stamm.', :baumart'.$stamm.', :laenge'.$stamm.', :durchmesser'.$stamm.', :staerkeklasse'.$stamm.', :volumen'.$stamm.', :rindenabzug'.$stamm.'),';
+   		$sql .= ' (:hiebid'.$stamm.', :position'.$stamm.', :baumart'.$stamm.', :laenge'.$stamm.', :durchmesser'.$stamm.', :staerkeklasse'.$stamm.', :kubatur_mit'.$stamm.', :kubatur_ohne'.$stamm.'),';
    	}
 
    	$sql = substr($sql, 0, -1);
@@ -67,8 +69,9 @@ if($_POST['action'] == 'saveHieb')
 		$stmt->bindParam(':laenge'.$stamm, 			$details['laenge'], PDO::PARAM_STR);
 		$stmt->bindParam(':durchmesser'.$stamm, 	$details['durchmesser'], PDO::PARAM_STR);
 		$stmt->bindParam(':staerkeklasse'.$stamm, 	$details['staerkeKlasse'], PDO::PARAM_INT);
-		$stmt->bindParam(':volumen'.$stamm, 		$details['volumen'], PDO::PARAM_STR);
-		$stmt->bindParam(':rindenabzug'.$stamm, 	$details['rindenAbzug'], PDO::PARAM_INT);
+		$stmt->bindParam(':kubatur_mit'.$stamm, 	$details['volumen'], PDO::PARAM_STR);
+		$stmt->bindParam(':kubatur_ohne'.$stamm, 	$details['volumenOhne'], PDO::PARAM_STR);
+		
    	}
 
 	$stmt->execute();
@@ -89,7 +92,7 @@ if($_POST['action'] == 'saveHieb')
 if($_POST['action'] == 'showHiebList')
 {
 
-	$sql = "SELECT h.id, h.name,h.bestand, h.erfasser,DATE_FORMAT(datum, '%Y-%m-%dT%TZ') as datum from hieb h where h.erfasser = :erfasser order by h.datum DESC";
+	$sql = "SELECT h.id, h.name,h.bestand, h.erfasser,DATE_FORMAT(datum, '%Y-%m-%dT%TZ') as datum from hieb h where h.erfasser = :erfasser order by h.datum DESC, h.id DESC";
 
 	$stmt = $db->prepare($sql);   	
 
@@ -103,7 +106,7 @@ if($_POST['action'] == 'showHiebList')
 
 	while($temp = $stmt->fetch(PDO::FETCH_ASSOC))
 	{
-		$subselect = 'SELECT count(*) as stammAnz, sum(s.kubatur) as kubSum from staemme s where s.hiebid = :hiebid';
+		$subselect = 'SELECT count(*) as stammAnz, sum(s.kubatur_mit) as kubSumMit, sum(s.kubatur_ohne) as kubSumOhne from staemme s where s.hiebid = :hiebid';
 
 		$sub_stmt = $db->prepare($subselect);   	
 
@@ -115,7 +118,8 @@ if($_POST['action'] == 'showHiebList')
 
 		$out[$i] = $temp;
 
-		$out[$i]['kubSum'] = $sub_temp['kubSum'];
+		$out[$i]['kubSumMit'] = $sub_temp['kubSumMit'];
+		$out[$i]['kubSumOhne'] = $sub_temp['kubSumOhne'];
 
 		$out[$i]['stammAnz'] = $sub_temp['stammAnz'];
 
@@ -129,7 +133,7 @@ if($_POST['action'] == 'showHiebList')
 
 if($_POST['action'] == 'showHiebDetails')
 {
-	$sql = "SELECT * from staemme WHERE hiebid = :hiebid";
+	$sql = "SELECT * from staemme WHERE hiebid = :hiebid order by id ASC";
 
 	$stmt = $db->prepare($sql);   	
 
@@ -158,5 +162,26 @@ if($_POST['action'] == 'hiebCount')
 	echo json_encode($out);
 
 }
+
+if($_POST['action'] == 'hiebSum')
+{
+	$hiebid = $_POST['hiebid'];
+
+	$sql = 'SELECT baumart, sum(kubatur_mit) as mit, sum(kubatur_ohne) as ohne from staemme where hiebID = :hiebid group by baumart';
+
+	$stmt = $db->prepare($sql);   	
+
+	$stmt->bindParam(':hiebid', $hiebid,PDO::PARAM_INT);
+
+	$stmt->execute();
+
+
+	$out = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	
+	echo json_encode($out);
+
+}
+
+
 
 ?>

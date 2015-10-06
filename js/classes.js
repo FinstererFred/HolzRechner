@@ -60,6 +60,7 @@ function Hieb(newH)
 					'rindenAbzugWert' : this.staemme[i].rindenAbzugWert,
 					'staerkeKlasse' : this.staemme[i].staerkeKlasse,
 					'volumen' : this.staemme[i].volumen,
+					'volumenOhne' : this.staemme[i].volumenOhne,
 					'position' : this.staemme[i].position
 				});
 	    	}
@@ -125,6 +126,21 @@ function Hieb(newH)
 	    	return j;
 	    },
 
+	    sumKubaturOhne: function()
+	    {
+	    	var j = 0;
+
+	    	for( var i in this.staemme)
+	    	{
+	    		if(typeof(this.staemme[i]) != 'undefined')
+	    		{
+	    			j += this.staemme[i].volumenOhne;
+	    		}
+	    	}
+
+	    	return j;
+	    },
+
 		writeList: function()
 		{
 			$('.listEintrag').remove();
@@ -133,13 +149,14 @@ function Hieb(newH)
 			{
 				var stamm = this.staemme[i];
 
-				$('<tr class="listEintrag" data-stammnr="'+stamm.position+'"><td>'+stamm.position+'</td>'+'<td class="baum">'+baeume[stamm.baumart]['name']+'</td>'+'<td class="kub">'+ formatKub(stamm.volumen) +' fm</td><td class="del" data-target="#myModal" data-toggle="modal"><i class="fa fa-minus-square fa-2x"></i></td></tr>').insertAfter('#listeHead');
+				$('<tr class="listEintrag" data-stammnr="'+stamm.position+'"><td>'+stamm.position+'</td>'+'<td class="baum">'+baeume[stamm.baumart]['name']+'</td>'+'<td class="kub">'+ formatKub(stamm.volumen, 'round') +' fm</td><td class="kub">'+ formatKub(stamm.volumenOhne, 'round') +' fm</td><td class="del" data-target="#myModal" data-toggle="modal"><i class="fa fa-minus-square fa-2x"></i></td></tr>').insertAfter('#listeHead');
 			}
 		},
 
 		writeListSum: function()
 		{
-			$('#kubSumme').html( formatKub( this.sumKubatur() ) );
+			$('#kubSumme').html( formatKub( this.sumKubatur(),'round' ) );
+			$('#kubSummeOhne').html( formatKub( this.sumKubaturOhne(),'round' ) );
 		},
 
 		writeStammCountToTab: function()
@@ -174,17 +191,16 @@ function Hieb(newH)
 
 	}
 
-function Stamm(durchmesser, laenge, baumart, rindenAbzug, showInButton) 
+function Stamm(durchmesser, laenge, baumart, showInButton) 
 {
 	this.durchmesser = durchmesser;
 	this.laenge = laenge;
 	this.baumart = baumart;
-	this.rindenAbzug = rindenAbzug;
 	this.rindenAbzugWert = 0;
 	this.staerkeKlasse = 0;
 	this.volumen = 0;
 	this.showInButton = showInButton;
-
+	this.volumenOhne = 0;
 	this.init();
 }
 
@@ -194,10 +210,7 @@ Stamm.prototype =
     {
     	this.findStaerkeKlasse(this.durchmesser);
     	
-    	if(this.rindenAbzug)
-    	{
-    		this.findRindenAbzug(this.durchmesser);
-    	}
+    	this.findRindenAbzug(this.durchmesser);
 
     	this.berechnen();
 
@@ -209,12 +222,13 @@ Stamm.prototype =
 
    	berechnen: function()
    	{
-   		this.volumen = formatKub(((Math.PI/4 * Math.pow( (this.durchmesser-this.rindenAbzugWert), 2) ) * this.laenge ) / 10000);
+   		this.volumen 		= formatKub(((Math.PI/4 * Math.pow( (this.durchmesser), 2) ) * this.laenge ) / 10000);
+   		this.volumenOhne	= formatKub(((Math.PI/4 * Math.pow( (this.durchmesser-this.rindenAbzugWert), 2) ) * this.laenge ) / 10000);
 	},
 
 	writeToButton: function()
 	{
-		$('#volumenErgebnis').html( formatKub(this.volumen) );
+		$('#volumenErgebnis').html( formatKub(this.volumen,'round') );
 	},
 
    	findStaerkeKlasse: function()
@@ -274,7 +288,7 @@ function Archiv()
 				{
 					var date = formatDate(resp[i].datum);
 
-					out += '<tr class="archivEntry" data-hiebid="'+resp[i].id+'"><td>'+date+'</td><td>'+resp[i].name+'</td><td>'+resp[i].bestand+'</td><td class="hidden-xs">'+resp[i].stammAnz+'</td><td class="hidden-xs">'+formatKub(resp[i].kubSum)+' fm</td></tr>';
+					out += '<tr class="archivEntry" data-hiebid="'+resp[i].id+'"><td>'+date+'</td><td>'+resp[i].name+'</td><td>'+resp[i].bestand+'</td><td class="hidden-xs">'+resp[i].stammAnz+'</td><td class="hidden-xs">'+resp[i].kubSumMit+' fm</td><td class="hidden-xs">'+resp[i].kubSumOhne+' fm</td></tr>';
 				}
 
 				if ( $.fn.dataTable.isDataTable('#hiebList') )
@@ -299,11 +313,21 @@ function Archiv()
 			.done( function(resp)
 			{
 				var out = '';
+				var baumart = -1;
 				for(var i in resp)
 				{
+					
 					var rinde = (resp[i].rindenabzug == '1') ? 'ja' : 'nein';
-
-					out += '<tr class="archivListEntry"><td>'+resp[i].position+'</td><td>'+baeume[resp[i].baumart].name+'</td><td>'+resp[i].laenge+' <span class="hidden-xs"> m</span><span class="visible-print"> m</span></td><td>'+resp[i].durchmesser+'<span class="hidden-xs"> cm</span><span class="visible-print"> cm</span></td><td>'+staerkeKlassen[resp[i].staerkeklasse].name+'</td><td>'+rinde+'</td><td class="kub">'+resp[i].kubatur+' fm</td></tr>';
+					/*
+					if(baumart != resp[i].baumart ) {
+						if(baumart!= -1) {
+							out+='<tr><td colspan="5" align="right"></td><td align="right"><span id="detailKubaturMit_'+i+'">88</span></td> <td align="right"><span id="detailKubaturOhne_'+i+'">77</span></td> </tr>';
+						}
+						baumart = resp[i].baumart;
+					}
+					*/
+					out += '<tr class="archivListEntry"><td>'+resp[i].position+'</td><td>'+baeume[resp[i].baumart].name+'</td><td>'+resp[i].laenge+' <span class="hidden-xs hidden-print"> m</span><span class="visible-print-inline-block" > m</span></td><td>'+resp[i].durchmesser+'<span class="hidden-xs hidden-print" > cm</span> <span class="visible-print-inline-block" > cm</span></td><td>'+staerkeKlassen[resp[i].staerkeklasse].name+'</td><td class="kub">'+resp[i].kubatur_mit+' fm</td><td class="kub">'+resp[i].kubatur_ohne+' fm</td></tr>';
+				
 				}
 
 				$('#hiebDetails tbody').html('').html(out);

@@ -127,7 +127,7 @@ $(function ()
 			}
 			else
 			{
-				newHieb.addStamm( new Stamm( _durchmesser,_laenge,_stammArt, _stammRinde, true ) );
+				newHieb.addStamm( new Stamm( _durchmesser,_laenge,_stammArt, true ) );
 				newHieb.checkboxSaveButton();
 			}
 
@@ -201,7 +201,13 @@ $(function ()
 			$('#detailName').html(kopfdaten.name);
 			$('#detailBestand').html(kopfdaten.bestand);
 			$('#detailDatum').html(kopfdaten.datum);
-			$('#detailKubatur').html(kopfdaten.kubatur);
+
+
+			getHiebSum( $(this).data('hiebid') );
+			//
+
+			$('#detailKubaturMit').html(kopfdaten.kubatur_mit);
+			$('#detailKubaturOhne').html(kopfdaten.kubatur_ohne);
 			
 			
 			$('#archivDetail').show();
@@ -292,10 +298,34 @@ function datum()
 	return  dd+'.'+mm+'.'+yyyy;
 }
 
-function formatKub(kub)
+function formatKub(kub, type)
 {
 	/* erg auf 2 stellen nach dem komma abrunden */
-	return Math.floor((kub * 100 )) / 100;
+	if(type == 'round') {
+		return (Math.floor((kub * 100 )) / 100).toFixed(2);	
+	} else {
+		return Math.floor((kub * 100 )) / 100;	
+	}
+	
+	
+}
+
+function getHiebSum(hiebid)
+{
+	$.ajax({
+		method: "POST",
+		url: 'php/ajax.php',
+		data: { action : 'hiebSum', hiebid: hiebid},
+		dataType : 'json'	
+	})
+	.done( function(resp)
+	{
+		$('.baumartSum').remove();
+		$(resp).each(function(key,value) {
+
+			$('<tr class="baumartSum"> <td colspan="" align="right"></td><td>'+baeume[value.baumart].name+'</td> <td></td> <td></td> <td></td>  <td align="right">'+value.mit+' fm</td> <td align="right">'+value.ohne+' fm</td></tr>').insertAfter('#zwischensumme');
+		});
+	});	
 }
 
 function getHiebCount()
@@ -318,11 +348,13 @@ function getHiebCount()
 
 function getHiebKopfdaten(hieb)
 {
+
 	var out = {};
 	out.name =    $(hieb).find('td:nth-child(2)').html();
 	out.bestand = $(hieb).find('td:nth-child(3)').html();
 	out.datum =   $(hieb).find('td:nth-child(1)').html();
-	out.kubatur = $(hieb).find('td:last').html();
+	out.kubatur_mit =  $(hieb).find('td:nth-child(5)').html();
+	out.kubatur_ohne = $(hieb).find('td:last').html();
 
 	return out;
 }

@@ -12,7 +12,11 @@ var staerkeKlassen =
 	8: {'name': '5',  'von' :50, 'bis': 59},
 	9: {'name': '6',  'von' :60, 'bis': 69},
 	10: {'name': '7', 'von' :70, 'bis': 79},
-	11: {'name': '8', 'von' :80, 'bis': 89}
+	11: {'name': '8', 'von' :80, 'bis': 89},
+	12: {'name': '9', 'von' :90, 'bis': 99},
+	13: {'name': '10', 'von' :100, 'bis': 109},
+	14: {'name': '11', 'von' :110, 'bis': 119},
+	15: {'name': '12', 'von' :120, 'bis': 129},
 }
 
 var rindenAbzug = 
@@ -20,20 +24,20 @@ var rindenAbzug =
 	0 : { 
 		0: { 'von': 0, 'bis': 4, 'abzug': 1},
 		1: { 'von': 5, 'bis': 8, 'abzug': 2},
-		2: { 'von': 9, 'bis': 100, 'abzug': 3}
+		2: { 'von': 9, 'bis': 129, 'abzug': 3}
 	},
 
 	1 : { 
 		0: { 'von': 0, 'bis': 2, 'abzug': 1},
 		1: { 'von': 3, 'bis': 5, 'abzug': 2},
 		2: { 'von': 6, 'bis': 8, 'abzug': 3},
-		3: { 'von': 9, 'bis':100, 'abzug': 4}
+		3: { 'von': 9, 'bis':129, 'abzug': 4}
 		
 	},
 
 	2 : { 
 		0: { 'von': 0, 'bis': 6, 'abzug': 1},
-		1: { 'von': 7, 'bis': 100, 'abzug': 2}		
+		1: { 'von': 7, 'bis': 129, 'abzug': 2}		
 	},
 
 	3 : { 
@@ -41,7 +45,7 @@ var rindenAbzug =
 		1: { 'von': 4, 'bis': 4, 'abzug': 2},
 		2: { 'von': 5, 'bis': 6, 'abzug': 3},
 		3: { 'von': 7, 'bis': 7, 'abzug': 4},
-		4: { 'von': 8, 'bis': 100, 'abzug': 5}
+		4: { 'von': 8, 'bis': 129, 'abzug': 5}
 	}
 }
 

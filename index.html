@@ -44,7 +44,8 @@
 				        <th>Name</th>
 				        <th>Bestand</th>
 				        <th class="col-md-2 hidden-xs">Stämme</th>
-				        <th class="col-md-2 hidden-xs">Kubatur</th>
+				        <th class="col-md-2 hidden-xs">Kub. m.R.</th>
+				        <th class="col-md-2 hidden-xs">Kub. o.R.</th>
 				      </tr>
 				    </thead>
 				    <tbody></tbody>
@@ -67,14 +68,29 @@
 					        <th><span class="visible-print">Länge</span><span class="hidden-xs ">Länge</span><span class="hidden-sm hidden-md hidden-lg hidden-print">L</span></th>
 					        <th><span class="visible-print">Durchmesser</span><span class="hidden-xs ">Durchmesser</span><span class="hidden-sm hidden-md hidden-lg hidden-print">D</span></th>
 					        <th><span class="visible-print">Stärkeklasse</span><span class="hidden-xs ">Stärkeklasse</span><span class="hidden-sm hidden-md hidden-lg hidden-print">SK</span></th>
-					        <th class="col-md-2"><span class="visible-print">Rindenabzug</span><span class="hidden-xs">Rindenabzug</span><span class="hidden-sm hidden-md hidden-lg hidden-print">RAZ</span></th>
-					        <th class="kub">Kubatur</th>
+					        
+					        <th class="kub">Kub. m.R.</th>
+					        <th class="kub">Kub. o.R.</th>
 					      </tr>
 					    </thead>
 					    <tbody></tbody>
-					    <tfoot><tr><td colspan="7" align="right"><span id="detailKubatur"></span></td></tr></tfoot>
+						<tfoot style="display: table-row-group">
+						    <tr id="zwischensumme">
+								<td colspan="5" align="right"></td>
+								<td></td>
+								<td></td>
+							</tr>
+						   
+						    <tr>
+								<td ></td>
+							    <td colspan="4" align="left"><b>Gesamt</b></td>
+							    <td align="right"><b><span id="detailKubaturMit"></span></b></td>
+							    <td align="right"><b><span id="detailKubaturOhne"></span></b></td>
+						    </tr>
+					    </tfoot>
 					</table>
 					
+
 					<button type="button" class="btn btn-default pull-right hidden-print" id="showHiebList" >Zurück</button>
 				</div>
 			</div>
@@ -138,18 +154,7 @@
 	                        </div>
 	                    </div>
 	                    
-	                    <div class="form-group">
-	                        <label for="stammRinde" class="col-sm-3 control-label hidden-xs">Rindenabzug</label>
-	                        <div class="col-sm-9">
-	                         	<div class="col-sm-6 input-group">
-	                        		<div class="checkbox">
-										<label>
-	                        				<input type="checkbox" id="stammRinde" value="option1" aria-label="..." class="checkStyle"> <span class="hidden-sm hidden-md hidden-lg">Rindenabzug</span>
-	                        			</label>
-	                        		</div>
-	                        	</div>
-	                       	</div>
-	                    </div>
+	                    
 
 	                    <div class="form-group">
 	                        <label for="stammAbschnitt" class="col-sm-3 control-label hidden-xs">Abschnitte</label>
@@ -198,15 +203,17 @@
 	                        <div class="col-sm-9">
 	                        	<table id="stammListe" width="100%">
 	                        		<tr id="listeHead">
-	                        			<th>Nr</th>
+	                        			<th>Nr.</th>
 	                        			<th class="baum">Baumart</th>
-	                        			<th class="kub">Kubatur</th>
+	                        			<th class="kub">Kub. m.R.</th>
+	                        			<th class="kub">Kub. o.R.</th>
 	                        			<th class="del"></th>
 	                        		</tr>
 	                        		<tr>
 	                        			<td></td>
-	                        			<td></td>
-	                        			<td class="kub"><b>ges. <span id="kubSumme"></span> fm</b></td>
+	                        			<td align="center"><b>Gesamt</b></td>
+	                        			<td class="kub"><b><span id="kubSumme"></span> fm</b></td>
+	                        			<td class="kub"><b><span id="kubSummeOhne"></span> fm</b></td>
 	                        			<td class="del"></td>
 	                        		</tr>
 	                        	</table>
