@@ -69,7 +69,7 @@ function Hieb(newH)
     		{
     			method: "POST",
     			url: 'php/ajax.php',
-    			data: { kopfdaten : _kopfdaten, staemme: _staemme, action : 'saveHieb'},
+    			data: { kopfdaten : _kopfdaten, staemme: JSON.stringify(_staemme), action : 'saveHieb'},
     			dataType : 'json'	
     		})
     		.done( function(resp)
@@ -149,7 +149,7 @@ function Hieb(newH)
 			{
 				var stamm = this.staemme[i];
 
-				$('<tr class="listEintrag" data-stammnr="'+stamm.position+'"><td>'+stamm.position+'</td>'+'<td class="baum">'+baeume[stamm.baumart]['name']+'</td>'+'<td class="kub">'+ formatKub(stamm.volumen, 'round') +' fm</td><td class="kub">'+ formatKub(stamm.volumenOhne, 'round') +' fm</td><td class="del" data-target="#myModal" data-toggle="modal"><i class="fa fa-minus-square fa-2x"></i></td></tr>').insertAfter('#listeHead');
+				$('<tr class="listEintrag" data-stammnr="'+stamm.position+'"><td>'+stamm.position+'</td>'+'<td class="baum">'+baeume[stamm.baumart]['name']+'</td>'+'<td class="kub">'+ stamm.laenge +' m</td><td class="kub">'+ stamm.durchmesser + ' cm</td><td class="del" data-target="#myModal" data-toggle="modal"><i class="fa fa-minus-square fa-2x"></i></td></tr>').insertAfter('#listeHead');
 			}
 		},
 
@@ -318,14 +318,7 @@ function Archiv()
 				{
 					
 					var rinde = (resp[i].rindenabzug == '1') ? 'ja' : 'nein';
-					/*
-					if(baumart != resp[i].baumart ) {
-						if(baumart!= -1) {
-							out+='<tr><td colspan="5" align="right"></td><td align="right"><span id="detailKubaturMit_'+i+'">88</span></td> <td align="right"><span id="detailKubaturOhne_'+i+'">77</span></td> </tr>';
-						}
-						baumart = resp[i].baumart;
-					}
-					*/
+				
 					out += '<tr class="archivListEntry"><td>'+resp[i].position+'</td><td>'+baeume[resp[i].baumart].name+'</td><td>'+resp[i].laenge+' <span class="hidden-xs hidden-print"> m</span><span class="visible-print-inline-block" > m</span></td><td>'+resp[i].durchmesser+'<span class="hidden-xs hidden-print" > cm</span> <span class="visible-print-inline-block" > cm</span></td><td>'+staerkeKlassen[resp[i].staerkeklasse].name+'</td><td class="kub">'+resp[i].kubatur_mit+' fm</td><td class="kub">'+resp[i].kubatur_ohne+' fm</td></tr>';
 				
 				}

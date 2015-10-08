@@ -206,6 +206,7 @@ $(function ()
 			getHiebSum( $(this).data('hiebid') );
 			//
 
+			$('#detailAnzahl').html(kopfdaten.anzahl+" x");
 			$('#detailKubaturMit').html(kopfdaten.kubatur_mit);
 			$('#detailKubaturOhne').html(kopfdaten.kubatur_ohne);
 			
@@ -323,7 +324,7 @@ function getHiebSum(hiebid)
 		$('.baumartSum').remove();
 		$(resp).each(function(key,value) {
 
-			$('<tr class="baumartSum"> <td colspan="" align="right"></td><td>'+baeume[value.baumart].name+'</td> <td></td> <td></td> <td></td>  <td align="right">'+value.mit+' fm</td> <td align="right">'+value.ohne+' fm</td></tr>').insertAfter('#zwischensumme');
+			$('<tr class="baumartSum"> <td colspan="" align="right">'+value.anzahl+' x</td><td>'+baeume[value.baumart].name+'</td> <td></td> <td></td> <td></td>  <td align="right">'+value.mit+' fm</td> <td align="right">'+value.ohne+' fm</td></tr>').insertAfter('#zwischensumme');
 		});
 	});	
 }
@@ -355,6 +356,7 @@ function getHiebKopfdaten(hieb)
 	out.datum =   $(hieb).find('td:nth-child(1)').html();
 	out.kubatur_mit =  $(hieb).find('td:nth-child(5)').html();
 	out.kubatur_ohne = $(hieb).find('td:last').html();
+	out.anzahl = $(hieb).find('td:nth-child(4)').html();	
 
 	return out;
 }

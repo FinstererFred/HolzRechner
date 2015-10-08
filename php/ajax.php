@@ -2,8 +2,9 @@
 
 include('db.class.php');
 
-/**/
+
 $benutzer = "%".$_SERVER['REMOTE_USER']."%";
+
 $sql = 'SELECT * from benutzer b where b.kurz like :usernr';
 $stmt = $db->prepare($sql);
 $stmt->bindParam('usernr',$benutzer,PDO::PARAM_STR);
@@ -13,7 +14,6 @@ $benutzer = $result['id'];
 
 
 $erfasser = $benutzer;
-
 
 if($_POST['action'] == 'saveHieb')
 {
@@ -49,7 +49,8 @@ if($_POST['action'] == 'saveHieb')
     $hiebid = $db->lastInsertId();
 
     /* staemme speichern */ 
-
+	$_POST['staemme'] = json_decode($_POST['staemme'], true);
+	
    	$sql = 'INSERT INTO staemme (hiebid, position, baumart, laenge, durchmesser,staerkeklasse, kubatur_mit, kubatur_ohne) VALUES ';
 
    	foreach ($_POST['staemme'] as $stamm => $details) 
@@ -167,7 +168,7 @@ if($_POST['action'] == 'hiebSum')
 {
 	$hiebid = $_POST['hiebid'];
 
-	$sql = 'SELECT baumart, sum(kubatur_mit) as mit, sum(kubatur_ohne) as ohne from staemme where hiebID = :hiebid group by baumart';
+	$sql = 'SELECT baumart, count(baumart) as anzahl, sum(kubatur_mit) as mit, sum(kubatur_ohne) as ohne from staemme where hiebID = :hiebid group by baumart';
 
 	$stmt = $db->prepare($sql);   	
 
